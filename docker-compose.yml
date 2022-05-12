@@ -1,0 +1,5 @@
+version: '2'
+services:
+  compose-test:
+    image: profed11/devops_proj2:latest
+      
