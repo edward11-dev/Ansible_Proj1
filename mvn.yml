@@ -1,0 +1,8 @@
+- name: webapp pkg
+  hosts: localhost
+  
+  tasks:
+    - name: mvn clean
+      #run playbook
+      ansible.builtin.command: mvn -f ~/BookzyApp/pom.xml clean package 
+      
