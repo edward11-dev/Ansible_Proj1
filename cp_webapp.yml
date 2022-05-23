@@ -1,0 +1,12 @@
+---
+- hosts: all
+
+become: yes
+become_method: sudo
+remoote_user: ubuntu
+
+tasks:
+  - name: Copy webapp to webserver
+    copy:
+      src: target/bookzyWebApp.war
+      dest: /opt/tomcat/weapps/
