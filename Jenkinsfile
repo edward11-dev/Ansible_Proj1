@@ -2,26 +2,46 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Build and package app') {
             steps {
-                sh """
-                echo 'Building..'
-                docker build -t profed11/devops_proj2:latest .
-                docker login -u "profed11" -p "eR-PaE9Evrun7!Z" docker.io
-                docker push profed11/devops_proj2:latest
-                """
+                ansiblePlaybook(
+                playbook: 'mvn.yml'
+                )
             }
         }
-        stage('Creating Docker Container') {
+        stage('Generate AWS keypair') {
             steps {
-                sh """
-                echo 'Creating Docker Container...'
-                pip install docker-compose
-                chmod +x /var/lib/jenkins/.local/bin/docker-compose
-                /var/lib/jenkins/.local/bin/docker-compose up -d --remove-orphans
-                docker ps -a
-               """
+                ansiblePlaybook(
+                    playbook: 'ec2_newKeypair.yml'
+                    vaultCredentialsId: 'AnsibleVaultPassword',
+                    extras: '-e @aws-vars.yml'
+                )
             }     
+        }
+        stage('Launch EC2 Instance') {
+            steps {
+                ansiblePlaybook(
+                   playbook: 'create_host.yml'
+                   vaultCredentialsId: 'AnsibleVaultPassword',
+                   extras: '-e @aws-vars.yml' 
+                )
+            }
+        }
+        stage('Provision Tomcat') {
+            steps {
+                ansiblePlaybook(
+                    playbook: 'tomcat.yml'
+                    inventory: 'hosts.ini'
+                )
+            }
+        }
+        stage('Deploy App') {
+            steps {
+                ansiblePlaybook(
+                    playbook: 'copy_webapp.yml'
+                    inventory: 'hosts.ini'
+                )
+            }
         }
     }
 }
