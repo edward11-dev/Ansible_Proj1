@@ -13,8 +13,7 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     playbook: 'ec2_newKeypair.yml'
-                    vaultCredentialsId: 'AnsibleVaultPassword',
-                    extras: '-e @aws-vars.yml'
+                    
                 )
             }     
         }
