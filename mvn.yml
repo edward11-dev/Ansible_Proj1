@@ -4,5 +4,5 @@
   tasks:
     - name: mvn clean
       #run playbook
-      ansible.builtin.command: mvn -f ~/BookzyApp/pom.xml clean package 
+      ansible.builtin.command: mvn -f /Users/edwardhanks/DevOps/Ansible_Terraform/Ansible_Proj1/pom.xml clean package 
       
