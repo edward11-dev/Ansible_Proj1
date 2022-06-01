@@ -28,7 +28,7 @@ pipeline {
         stage('Provision Tomcat') {
             steps {
                 ansiblePlaybook(
-                    playbook: 'tomcat.yml'
+                    playbook: 'tomcat.yml',
                     inventory: 'hosts.ini'
                 )
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy App') {
             steps {
                 ansiblePlaybook(
-                    playbook: 'copy_webapp.yml'
+                    playbook: 'copy_webapp.yml',
                     inventory: 'hosts.ini'
                 )
             }
