@@ -22,8 +22,7 @@ pipeline {
             steps {
                 ansiblePlaybook(
                    playbook: 'create_host.yml'
-                   vaultCredentialsId: 'AnsibleVaultPassword',
-                   extras: '-e @aws-vars.yml' 
+                                       
                 )
             }
         }
